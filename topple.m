@@ -1,16 +1,14 @@
 
-
-m = 1; %mass of block
+m = 0.00456; %mass of domino
 g = 9.82;%gravity
-H = 2; %height
-B = 1; %width
-T = 0.2; %thickness
+H = 0.04353; %height
+B = 0.02156; %width
+T = 0.00679; %thickness
 
 r = sqrt(H^2 + T^2); %distance from where force hits to pivot point
-l = sqrt((H/2)^2 + (T/2)^2); %distance from center of mass to pivot point
 
-tTot = 3; %total time of simulation
-h = 0.005; %step length
+tTot = 1; %total time of simulation
+h = 0.0005; %step length
 N = tTot/h; %number of samples
 
 ang_acc = zeros(1,N); %angular acceleration
@@ -26,16 +24,26 @@ for t=0:h:tTot-h
 if n==N
 break;
 end
-ang_acc(n+1) = (1/J)*((force(t)*r) - (g*m*d(theta(n), l, n))); %a is angle acceleration
-omega(n + 1) = omega(n) + h*a(n);
-theta (n+1) = theta(n) + h*omega(n);
+taoTot = force(t)*r - g*m*d(theta(n), T, H, n); %total torque
+ang_acc(n+1) = taoTot/J; %a is angle acceleration
+omega(n+1) = omega(n) + h*ang_acc(n);
+theta(n+1) = theta(n) + h*omega(n);
 
-if theta(n+1) > 0.01
+if (theta(n+1)<0)
+theta(n+1) = 0;
+omega(n+1) = 0;
+ang_acc(n+1) = 0;
+break;
+end
+
+if (theta(n+1)>0.001)
 retur = 1;
 end
-if abs(theta(n+1)) < 0.005
+
+if abs(theta(n+1)) < 0.0005
 if retur == 1
 omega(n+1) = 0;
+ang_acc(n+1) = 0;
 break;
 end
 end
@@ -53,7 +61,7 @@ end
 t = (0:h:tTot-h);
 
 subplot(1,3,1)
-p1 = plot(t,a);
+p1 = plot(t,ang_acc);
 title('Angular acceleration')
 
 subplot(1,3,2)
