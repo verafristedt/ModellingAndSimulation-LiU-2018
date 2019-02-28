@@ -58,9 +58,9 @@ public class domino1 : MonoBehaviour
 
             if (theta[n + 1] < Mathf.PI / 2)
             {
-                rb.transform.Rotate(0, (theta[n + 1] - theta[n]) * 180 / Mathf.PI, 0);
+				rb.transform.Rotate((theta[n + 1] - theta[n]) * 180 / Mathf.PI, 0, 0);
             }
-            else rb.transform.Rotate(0, (Mathf.PI / 2 - theta[n]) * 180 / Mathf.PI, 0);
+			else rb.transform.Rotate((Mathf.PI / 2 - theta[n]) * 180 / Mathf.PI, 0, 0);
         }
 
         else
