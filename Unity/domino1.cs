@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Domino1 : MonoBehaviour
+public class domino1 : MonoBehaviour
 {
-    public float force = 100f;
+    private float force = 100f;
 
     private bool hascollided = false;
-		private const float ANGLE = 1.4f; // angle where blocks stop
+    private const float ANGLE = 1.4f; // angle where blocks stop
     public static float m = 0.00456f; //mass
     public static float g = 9.82f; //gravity
     public static float H = 0.04353f; // Height
@@ -29,6 +29,7 @@ public class Domino1 : MonoBehaviour
 
     public Collider col;
     public Rigidbody rb; //Body of cube
+    private bool hasBegun = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,27 +45,37 @@ public class Domino1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (theta[n] < ANGLE) //18.75 degrees
+        if (Input.GetKeyDown("space"))
         {
-            alpha[n + 1] = ((1 / (Mathf.Pow(m, 2))) * (Force() * r) - (g * m * Distance(theta[n], l, T, H, n)));
-            omega[n + 1] = omega[n] + alpha[n] * h;
-            theta[n + 1] = theta[n] + omega[n] * h;
+            hasBegun = true;
+        }
 
-            if (theta[n + 1] < ANGLE)
+        while (hasBegun)
+        {
+
+            if (theta[n] < ANGLE)
             {
-							rb.transform.Rotate( -(theta[n + 1] - theta[n]) * 180 / Mathf.PI, 0 , 0);
-            }
-			  else rb.transform.Rotate( -(ANGLE - theta[n]) * 180 / Mathf.PI,0, 0);
-        }
+                alpha[n + 1] = ((1 / (Mathf.Pow(m, 2))) * (Force() * r) - (g * m * Distance(theta[n], l, T, H, n)));
+                omega[n + 1] = omega[n] + alpha[n] * h;
+                theta[n + 1] = theta[n] + omega[n] * h;
 
-        else
-        {
-            theta[n + 1] = ANGLE;
-						enabled = false;
+                if (theta[n + 1] < ANGLE)
+                {
+                    rb.transform.Rotate(0, (theta[n + 1] - theta[n]) * 180 / Mathf.PI, 0);
+                }
+                else rb.transform.Rotate(0, (ANGLE - theta[n]) * 180 / Mathf.PI, 0);
+            }
+
+            else
+            {
+                theta[n + 1] = ANGLE;
+                enabled = false;
+            }
+            n++;
         }
-        n++;
 
     }
+
 
     float Force()
     {
@@ -76,15 +87,15 @@ public class Domino1 : MonoBehaviour
     }
 
 
-		void  OnCollisionEnter()
-		{
-        if(!hascollided)
+    void OnCollisionEnter()
+    {
+        if (!hascollided)
         {
             hascollided = true;
             System.Array.Clear(omega, 0, N);
             Destroy(col);
         }
-		}
+    }
 
     float d;
     float Distance(float theta, float l, float T, float H, int n)
@@ -93,7 +104,7 @@ public class Domino1 : MonoBehaviour
         {
             d = T / 2;
         }
-        else if (theta > (Mathf.Atan(T / H)*180/Mathf.PI))
+        else if (theta > (Mathf.Atan(T / H) * 180 / Mathf.PI))
         {
             d = -l * Mathf.Sin(theta);
         }
