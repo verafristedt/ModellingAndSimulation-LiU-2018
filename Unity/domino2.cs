@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Domino2 : MonoBehaviour
+
+
+public class domino2 : MonoBehaviour
 {
+
+	public AudioClip MusicClip;
+	public AudioSource MusicSource;
 
 	public float force = 100f;
 	private bool hascollided = false;
@@ -34,6 +39,7 @@ public class Domino2 : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		MusicSource.clip = MusicClip;
 		rb = GetComponent<Rigidbody>(); //Initialize rb
 		col = GetComponent<Collider>();
 
@@ -103,6 +109,7 @@ public class Domino2 : MonoBehaviour
 			{
 				hascollided = true;
 				print("1?: " + counter); //debug
+			MusicSource.Play();
 			}
 			else if(counter == 2)
 			{
