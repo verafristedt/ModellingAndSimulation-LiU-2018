@@ -6,7 +6,7 @@ public class domino1 : MonoBehaviour
 {
 
     public float force = 100f;
-
+	private bool hascollided = false; 
 
     public static float m = 0.00456f; //mass
     public static float g = 9.82f; //gravity
@@ -61,6 +61,7 @@ public class domino1 : MonoBehaviour
 				rb.transform.Rotate((theta[n + 1] - theta[n]) * 180 / Mathf.PI, 0, 0);
             }
 			else rb.transform.Rotate((Mathf.PI / 2 - theta[n]) * 180 / Mathf.PI, 0, 0);
+
         }
 
         else
@@ -102,6 +103,14 @@ public class domino1 : MonoBehaviour
    
         return d;
     }
+
+	void  OnCollisionEnter()
+	{
+		hascollided = true;
+		enabled = false;
+		System.Array.Clear(omega, 0, N);
+
+	}
 
 
 }

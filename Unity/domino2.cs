@@ -7,6 +7,7 @@ public class domino2 : MonoBehaviour
 
 	public float force = 100f;
 	private bool hascollided = false; 
+	private bool secondcollision = false;
 
 	public static float m = 0.00456f; //mass
 	public static float g = 9.82f; //gravity
@@ -65,6 +66,7 @@ public class domino2 : MonoBehaviour
 			else {
 
 				theta [n + 1] = Mathf.PI / 2;
+				enabled = false;
 			}
 
 
@@ -103,7 +105,11 @@ public class domino2 : MonoBehaviour
 
 	void  OnCollisionEnter()
 	{
-		hascollided = true;
+		if (!hascollided) {
+			hascollided = true;
+			omega [n] = 0;
+		}
+
 	}
 
 
